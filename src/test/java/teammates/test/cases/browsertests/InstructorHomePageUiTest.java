@@ -1,5 +1,7 @@
 package teammates.test.cases.browsertests;
 
+//import java.util.List;
+
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
@@ -51,10 +53,10 @@ public class InstructorHomePageUiTest extends BaseUiTestCase {
     public void allTests() throws Exception {
         testPersistenceCheck();
         testLogin();
-        testContent();
+        testContent();        
         testAjaxCourseTableLoad();
         testShowFeedbackStatsLink();
-        testHelpLink();
+        testHelpLink();        
         testCourseLinks();
         testSearchAction();
         testSortAction();
@@ -63,6 +65,7 @@ public class InstructorHomePageUiTest extends BaseUiTestCase {
         testArchiveCourseAction();
         testCopyToFsAction();
         testDeleteCourseAction();
+        testGettingStartedLink();
     }
 
     private void testAjaxCourseTableLoad() throws Exception {
@@ -169,9 +172,14 @@ public class InstructorHomePageUiTest extends BaseUiTestCase {
 
         InstructorHelpPage helpPage = homePage.loadInstructorHelpTab();
         helpPage.closeCurrentWindowAndSwitchToParentWindow();
-
     }
 
+    private void testGettingStartedLink() {
+        //test Getting Started Link during Ui Test
+        homePage.clickGettingStarted();      
+    }
+
+    
     private void testCourseLinks() {
         String courseId = testData.courses.get("CHomeUiT.CS1101").getId();
         String instructorId = testData.accounts.get("account").googleId;

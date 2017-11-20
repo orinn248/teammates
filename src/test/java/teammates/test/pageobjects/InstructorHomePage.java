@@ -34,6 +34,9 @@ public class InstructorHomePage extends AppPage {
     @FindBy(className = "button_sortenddate")
     private List<WebElement> tablesSortByEndDate;
 
+    @FindBy(xpath = "//a[@href='/instructorHelp.jsp#gs']")
+    private WebElement getStartedLink;
+
     private InstructorCopyFsToModal fsCopyModal;
 
     public InstructorHomePage(Browser browser) {
@@ -75,6 +78,14 @@ public class InstructorHomePage extends AppPage {
         for (WebElement ele : elements) {
             click(ele);
         }
+    }
+
+    public void clickGettingStarted() {
+        click(getStartedLink);
+    }
+    
+    public void closeCurrentWindowForParent() {
+        closeCurrentWindowAndSwitchToParentWindow();
     }
 
     public void sortTablesByName() {
