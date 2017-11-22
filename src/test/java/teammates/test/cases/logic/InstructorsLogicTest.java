@@ -54,6 +54,8 @@ public class InstructorsLogicTest extends BaseLogicTest {
         testDeleteInstructor();
         testDeleteInstructorsForGoogleId();
         testDeleteInstructorsForCourse();
+        testGetAllInstructors();
+        testPutSearchandDropDocument();
     }
 
     private void testAddInstructor() throws Exception {
@@ -416,16 +418,6 @@ public class InstructorsLogicTest extends BaseLogicTest {
 
         instructorId = "nonExistingInstructor";
 
-        for (int i = 0; i < 2; i++) {
-
-            try {
-                instructorsLogic.verifyInstructorExists(instructorId);
-                signalFailureToDetectException();
-            } catch (EntityDoesNotExistException e) {
-                AssertHelper.assertContains("Instructor does not exist", e.getMessage());
-            }
-        }
-
         try {
             instructorsLogic.verifyInstructorExists(instructorId);
             signalFailureToDetectException();
@@ -454,7 +446,6 @@ public class InstructorsLogicTest extends BaseLogicTest {
 
         ______TS("failure: instructor doesn't belong to course");
         instructorEmail[1] = "nonExistingInstructor@email.tmt";
-
 
         try {
             instructorsLogic.verifyIsEmailOfInstructorOfCourse(instructorEmail[1], courseId[0]);
@@ -737,6 +728,29 @@ public class InstructorsLogicTest extends BaseLogicTest {
 
         assertTrue(coOwnersEmailsFromDataBundle.containsAll(generatedCoOwnersEmails)
                 && generatedCoOwnersEmails.containsAll(coOwnersEmailsFromDataBundle));
+    }
+    
+    private void testGetAllInstructors() {
+        instructorsLogic.getAllInstructors();
+    }
+
+    private void testPutSearchandDropDocument() throws InvalidParametersException, EntityAlreadyExistsException {
+        String courseId = "test-PSD-ID";
+        String name = "Test-PSD Name";
+        String email = "Test-PSD.instr@email.tmt";
+        String displayedName = InstructorAttributes.DEFAULT_DISPLAY_NAME;
+        String role = Const.InstructorPermissionRoleNames.INSTRUCTOR_PERMISSION_ROLE_COOWNER;
+        InstructorPrivileges privileges =
+                new InstructorPrivileges(Const.InstructorPermissionRoleNames.INSTRUCTOR_PERMISSION_ROLE_COOWNER);
+        InstructorAttributes instrPsd = InstructorAttributes.builder("testID", courseId, name, email)
+                .withRole(role)
+                .withDisplayedName(displayedName)
+                .withPrivileges(privileges)
+                .build();
+        instructorsLogic.createInstructor(instrPsd);
+        instructorsLogic.putDocument(instrPsd);
+        instructorsLogic.searchInstructorsInWholeSystem(instrPsd.name);
+        instructorsLogic.deleteDocument(instrPsd);
     }
 
 }
